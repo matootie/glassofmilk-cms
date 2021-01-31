@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: strapi
-        image: matootie/cuhack-strapi:latest
+        image: xbendu/cuhack-strapi:latest
         resources:
           limits:
             memory: "128Mi"
