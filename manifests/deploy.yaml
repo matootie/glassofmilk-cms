@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: strapi
-        image: xbendu/cuhack-strapi:latest
+        image: xbendu/cuhack-strapi:v1.0.0
         resources:
           limits:
             memory: "128Mi"
@@ -109,10 +109,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: meili
+  name: meilisearch
 spec:
   selector:
-    app: meili
+    app: meilisearch
   ports:
   - port: 7700
     targetPort: 7700
@@ -120,21 +120,21 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: meili
+  name: meilisearch
 spec:
   selector:
     matchLabels:
-      app: meili
-  serviceName: meili
+      app: meilisearch
+  serviceName: meilisearch
   replicas: 1
   template:
     metadata:
       labels:
-        app: meili
+        app: meilisearch
     spec:
       containers:
-      - name: meili
-        image: meili:v0.18.1
+      - name: meilisearch
+        image: getmeili/meilisearch:v0.18.1
         resources:
           limits:
             memory: "128Mi"
@@ -156,3 +156,30 @@ spec:
       resources:
         requests:
           storage: 1Gi
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: backend
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  tls:
+  - hosts:
+    - strapi.yoik.software
+    - meili.yoik.software
+    secretName: backend-tls
+  rules:
+  - host: strapi.yoik.software
+    http:
+      paths:
+      - backend:
+          serviceName: strapi
+          servicePort: 1337
+  - host: meili.yoik.software
+    http:
+      paths:
+      - backend:
+          serviceName: meilisearch
+          servicePort: 7700
