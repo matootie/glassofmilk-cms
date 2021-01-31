@@ -1,9 +1,8 @@
 'use strict';
 
 const axios = require("axios").default;
-axios.defaults.baseURL = 'http://localhost:7700'
-// axios.defaults.baseURL = process.env.BASE_URL;
-// axios.defaults.headers.common['Authorization'] = process.env.AUTH_TOKEN;
+axios.defaults.baseURL = process.env.BASE_URL;
+axios.defaults.headers.common['Authorization'] = process.env.AUTH_TOKEN;
 
 module.exports = {
   lifecycles: {

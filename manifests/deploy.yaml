@@ -66,6 +66,13 @@ spec:
           value: https://cdn.yoik.software
         - name: SPACES_DIRECTORY
           value: glassofmilk
+        - name: AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: meili-password
+              name: very-secrets
+        - name: BASE_URL
+          value: https://meili.yoik.software
 ---
 apiVersion: v1
 kind: Service
