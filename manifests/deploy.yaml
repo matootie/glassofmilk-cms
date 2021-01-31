@@ -105,4 +105,54 @@ spec:
       resources:
         requests:
           storage: 1Gi
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: meili
+spec:
+  selector:
+    app: meili
+  ports:
+  - port: 7700
+    targetPort: 7700
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: meili
+spec:
+  selector:
+    matchLabels:
+      app: meili
+  serviceName: meili
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: meili
+    spec:
+      containers:
+      - name: meili
+        image: meili:v0.18.1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 7700
+          name: web
+        env:
+        - name: MEILI_MASTER_KEY
+          value: Password1234
+        volumeMounts:
+        - name: data
+          mountPath: /data.ms
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
