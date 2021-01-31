@@ -2,7 +2,7 @@
 
 const axios = require("axios").default;
 axios.defaults.baseURL = process.env.BASE_URL;
-axios.defaults.headers.common['Authorization'] = process.env.AUTH_TOKEN;
+axios.defaults.headers.common['X-Meili-API-Key'] = process.env.AUTH_TOKEN;
 
 module.exports = {
   lifecycles: {
